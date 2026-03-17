@@ -8,7 +8,7 @@ namespace Backend.Models
 {
     public partial class Customer
     {
-        public List<Customer> Gettall(BasicDbContext db)
+        public List<Customer> GetAll(BasicDbContext db)
         {
             List<Customer> customers = db.Customers
             .Where(c => c.IsDelete == false)
@@ -16,20 +16,22 @@ namespace Backend.Models
             return customers;
         }
 
-        public void Delete(BasicDbContext db)
+        public void Delete()
         {
             IsDelete = true;
         }
 
         public Customer Create(BasicDbContext db) {
             db.Customers.Add(this);
+            db.SaveChanges();
             return this;
         }
 
-        public Customer Update(BasicDbContext db) {
-            Customer customer = db.Customers.Where(c => c.Id == Id || c.IsDelete == false).FirstOrDefault();
-                customer.User = User;
-                db.SaveChanges(); 
+        public Customer Update(BasicDbContext db , int Id) {
+            Customer customer = db.Customers
+            .FirstOrDefault(c => c.Id == Id && c.IsDelete == false);
+            customer.User = User;
+            db.SaveChanges();
             return customer;
         }
     }
