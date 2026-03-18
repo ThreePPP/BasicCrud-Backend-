@@ -31,6 +31,7 @@ namespace Backend.Models
             Customer customer = db.Customers
             .FirstOrDefault(c => c.Id == Id && c.IsDelete == false);
             customer.User = User;
+            customer.IsDelete = IsDelete;
             db.SaveChanges();
             return customer;
         }

@@ -37,7 +37,8 @@ namespace Backend.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Customer> Update(Customer customer , int id) {
+        public ActionResult<Customer> Update(Customer customer , int id) 
+        {
             if (customer == null)
             {
                 return BadRequest();
