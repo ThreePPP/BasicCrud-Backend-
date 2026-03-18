@@ -39,9 +39,9 @@ namespace Backend.Controllers
         [HttpPut("{id}")]
         public ActionResult<Customer> Update(Customer customer , int id) 
         {
-            if (customer == null)
+            if (customer == null || customer.IsDelete == true)
             {
-                return BadRequest();
+                return NotFound();
             }
             return Ok(customer.Update(_db, id));
         }
@@ -49,7 +49,7 @@ namespace Backend.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(int id) {
             Customer customer = _db.Customers.FirstOrDefault(c => c.Id == id);
-            if (customer == null)
+            if (customer == null || customer.IsDelete == true)
             {
                 return NotFound();
             }
