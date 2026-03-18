@@ -29,11 +29,11 @@ namespace Backend.Models
 
         public Customer Update(BasicDbContext db , int Id) {
             Customer customer = db.Customers
-            .FirstOrDefault(c => c.Id == Id && c.IsDelete == false);
-            customer.User = User;
-            customer.IsDelete = IsDelete;
-            db.SaveChanges();
-            return customer;
+                                .FirstOrDefault(c => c.Id == Id && c.IsDelete == false);
+                this.Id = Id;
+                db.Entry(customer).CurrentValues.SetValues(this);
+                db.SaveChanges();
+                return customer;
         }
     }
 }

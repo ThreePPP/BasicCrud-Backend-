@@ -2,6 +2,7 @@
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace Backend.Controllers
 {
@@ -39,11 +40,12 @@ namespace Backend.Controllers
         [HttpPut("{id}")]
         public ActionResult<Customer> Update(Customer customer , int id) 
         {
-            if (customer == null || customer.IsDelete == true)
+            customer.Update(_db, id);
+            if (customer == null)
             {
                 return NotFound();
             }
-            return Ok(customer.Update(_db, id));
+            return Ok(customer);
         }
 
         [HttpDelete("{id}")]
