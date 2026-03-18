@@ -22,6 +22,7 @@ namespace Backend.Models
         }
 
         public Customer Create(BasicDbContext db) {
+            IsDelete = false;
             db.Customers.Add(this);
             db.SaveChanges();
             return this;

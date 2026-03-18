@@ -27,14 +27,22 @@ namespace Backend.Controllers
             return Ok(new Customer().GetAll(_db));
         }
 
+        [HttpGet("GetbyId")]
+        public ActionResult<List<Customer>> GetbyId(int id)
+        {
+            Customer customer = _db.Customers.FirstOrDefault(c => c.Id == id && c.IsDelete == false);
+            return Ok(customer);           
+        }
+
         [HttpPost("Create")]
         public ActionResult<Customer> Create(Customer customer)
         {
+            customer.Create(_db);
             if (customer == null )
             {
                 return BadRequest();
             }
-            return Ok(customer.Create(_db));
+            return Ok(customer);
         }
 
         [HttpPut("{id}")]
