@@ -22,16 +22,22 @@ namespace Backend.Controllers
         {
             if (_db.Customers == null)
             {
-                return NotFound();
+                return NotFound(new { code = 400 , message = "Not have Database"});
             }
-            return Ok(new Customer().GetAll(_db));
+            Customer customer = new Customer();
+            customer.GetAll(_db);
+            return Ok(new { code = 200 , message = "GetAll Success" , data = customer});
         }
 
         [HttpGet("GetbyId")]
         public ActionResult<List<Customer>> GetbyId(int id)
         {
             Customer customer = _db.Customers.FirstOrDefault(c => c.Id == id && c.IsDelete == false);
-            return Ok(customer);           
+            if ( customer == null) 
+            {
+                return BadRequest(new { code = 400, message = "Not found Id or already Delete" });
+            }
+            return Ok(new { code = 200 , message = "GetId Success" , data = customer });           
         }
 
         [HttpPost("Create")]
@@ -40,9 +46,9 @@ namespace Backend.Controllers
             customer.Create(_db);
             if (customer == null )
             {
-                return BadRequest();
+                return BadRequest(new { code = 200 , message = "Not found Id" });
             }
-            return Ok(customer);
+            return Ok(new { code = 200 , message = "Create Success" , data = customer});
         }
 
         [HttpPut("{id}")]
@@ -51,9 +57,9 @@ namespace Backend.Controllers
             customer.Update(_db, id);
             if (customer == null)
             {
-                return NotFound();
+                return BadRequest(new { code = 400, message = "Not found Id" });
             }
-            return Ok(customer);
+            return Ok(new { code = 200 , message = "Update Success" , data = customer });
         }
 
         [HttpDelete("{id}")]
@@ -61,11 +67,11 @@ namespace Backend.Controllers
             Customer customer = _db.Customers.FirstOrDefault(c => c.Id == id);
             if (customer == null || customer.IsDelete == true)
             {
-                return NotFound();
+                return BadRequest(new { code = 404, message = "Not found Id or already Delete" });
             }
             customer.Delete();
             _db.SaveChanges();
-            return Ok(customer);
+            return Ok(new { code = 200 , message = "Delete Success" , data = customer} );
         }
     }
 }
